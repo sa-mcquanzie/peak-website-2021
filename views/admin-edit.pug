@@ -1,0 +1,43 @@
+extends layouts/admin-layout
+
+block main
+  main
+      form#editentry(method="post" action="/admin/update/" + item + "/" + entry["id"])
+        table
+          each value, field in entry
+            - let inputType
+            if (field == "start_date" || field == "end_date" || field == "production_date" || field == "publication_date" || field == "acquisition_date")
+              - inputType = "date"
+            else
+              - inputType = "text"
+            if field != "id"
+              - let inputId = "_" + entry["id"] + "_" + field                  
+              tr
+                td #{field}
+                td
+                  if field == "description" || field == "bio"
+                    textarea(name=field)
+                      = entry[field]
+                  else if field == "price"
+                    input(type="number" min="1" step=".01" name=field)
+                  else if field == "total" || field == "remaining"
+                    input(type="number" min="0" step="1" name=field)
+                  else if field == "links"
+                    input(type="url" name=field)
+                  else
+                    input(
+                      type=inputType 
+                      size=28
+                      name=field
+                      value=entry[field]
+                      id=inputId
+                    )
+        input(type="hidden" name="id" value=entry["id"])
+        button#addbutton(type="submit" name="update")
+          p Update
+        button#deletebutton(
+          name="action"
+          value="delete"
+          onclick="return confirm('Are you sure?')"
+        )
+          p Delete

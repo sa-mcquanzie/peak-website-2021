@@ -1,0 +1,30 @@
+extends layouts/admin-layout
+
+block main
+  div#listheader
+    p
+      span#listtitle All #{items}
+    p 
+      form(method="post" action="/admin/create/" + item)
+        button.add(type="submit")
+          span#addbutton add new
+  main
+    div#listall
+      each datum in data
+        p #{item} ID: #{datum["id"]}
+          table
+            each value, field in datum
+              if field != "id"
+                tr
+                  td#listfield
+                    span(style="font-weight: 600")
+                      =field
+                  td#listvalue
+                    =value
+        p
+          form(method='post' action="/admin/delete/" + item + "/" + datum["id"])
+            a(href="/admin/edit/" + item + "/" + datum["id"])
+              span#editbutton edit
+            button.delete(type="submit")
+              span#deletebutton delete
+        hr

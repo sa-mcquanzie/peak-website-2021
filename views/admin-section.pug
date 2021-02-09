@@ -1,0 +1,38 @@
+extends layouts/admin-layout
+
+block main
+  main
+    div#listall
+      p
+        h3 All #{items}
+      each datum in data
+        form(method='post' action="/admin/update/" + item)
+          p #{datum["id"]}
+          p
+            each value, field in datum
+              if field != 'id'
+                - var inputId = "_" + datum['id'] + "_" + field;
+                p
+                  label(for=field) #{field} 
+                  input(
+                    type="text" 
+                    size=28
+                    name=field
+                    value=datum[field]
+                    id=inputId
+                  )
+            input(type="hidden" name="id" value=datum['id'])
+            .buttons
+              button.update(type="submit" name="update")
+                p Update
+                .space
+              button.delete(
+                name="action"
+                value="delete"
+                onclick="return confirm('Are you sure?')"
+              )
+                p Delete
+      form(method="post" action="/admin/create/" + item)
+        .buttons
+          button.add(type="submit")
+            p Add a new #{item}
